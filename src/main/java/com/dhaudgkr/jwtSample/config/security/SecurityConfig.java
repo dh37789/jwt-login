@@ -1,13 +1,14 @@
 package com.dhaudgkr.jwtSample.config.security;
 
+import com.dhaudgkr.jwtSample.config.security.jwt.JwtAuthenticationFilter;
 import com.dhaudgkr.jwtSample.config.security.jwt.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -22,10 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/swagger-ui/**"};
 
-    @Value("${api.v1}")
-    private String apiVersion;
-
-//    private final String[] PERMIT_ALL_PATH = {apiVersion + "/user/**","/exception/**", "/test"};
+    private final String[] PERMIT_ALL_PATH = {"/api/v1/user/**","/exception/**", "/h2-console/**"};
 
     public SecurityConfig (JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -40,18 +38,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable() // rest api이므로 기본설정 미사용
-                .csrf().disable() // rest api이므로 csrf 보안 미사용
+                .httpBasic().disable() // 기본설정 미사용
+                .csrf().disable() // csrf 보안 미사용
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt로 인증하므로 세션 미사용
                 .and()
                 .authorizeRequests()
-//                .antMatchers(PERMIT_ALL_PATH).permitAll()
-                .antMatchers("/api/v1/**").permitAll()
-                .antMatchers("/h2-console/**").permitAll();
+                .antMatchers(PERMIT_ALL_PATH).permitAll()
+                .antMatchers("/api/v1/user/login").permitAll()
+                .anyRequest().authenticated()
 //                .and()
 //                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
-//                .and()
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // jwt 필터 추가
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // jwt 필터 추가
     }
 }

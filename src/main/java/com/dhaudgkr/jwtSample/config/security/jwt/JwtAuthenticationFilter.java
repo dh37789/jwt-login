@@ -2,31 +2,34 @@ package com.dhaudgkr.jwtSample.config.security.jwt;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class JwtAuthenticationFilter extends GenericFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider){
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-//        String token = resolveToken(httpServletRequest);
-//        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-//            String username = jwtTokenProvider.getUsername(token);
-//            log.debug(username + " : token이 맞습니다.");
-//        }
-//
-//        chain.doFilter(request, response);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String token = resolveToken(httpServletRequest);
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            String username = jwtTokenProvider.getUsername(token);
+            log.debug(username + " : token이 맞습니다.");
+        }
+
+        filterChain.doFilter(request, response);
     }
 
     /*

@@ -7,10 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-public class BootToddlerApplication {
+public class JwtLoginApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BootToddlerApplication.class, args);
+        SpringApplication.run(JwtLoginApplication.class, args);
     }
 
     @Bean
