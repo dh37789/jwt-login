@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: local
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/workspace/boot-toddler/src/main/resources/test_db;AUTO_SERVER=TRUE
+    username: sa
+    password:
+  jwt:
+    header: Authorization
+    secret: APPLE1BANANA2CIRCLE3DIAMOND4ELITE5FLY6GRANT7HYBERNATE8
+    access-token-validity-in-seconds: 1800
+    refresh-token-validity-in-seconds: 604800
+
+
+api:
+  v1: /api/v1
+
+
+

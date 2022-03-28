@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:userdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jwt:
+    header: Authorization
+    secret: EpikhighIsBack
+    access-token-validity-in-seconds: 1800
+    refresh-token-validity-in-seconds: 604800
+
+api:
+  v1: /api/v1
+
+
+
