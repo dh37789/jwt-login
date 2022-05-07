@@ -1,13 +1,14 @@
 package com.dhaudgkr.jwtsample.domain.user.dto;
 
 import com.dhaudgkr.jwtsample.domain.user.entity.User;
+import com.dhaudgkr.jwtsample.global.config.common.LoginEnum;
 import com.dhaudgkr.jwtsample.global.config.common.RegisterEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class UserRegisterDto {
+public class UserLoginDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,13 +26,6 @@ public class UserRegisterDto {
             this.password = encodePassword;
         }
 
-        public User toEntity() {
-            return User.builder()
-                    .username(username)
-                    .password(password)
-                    .activated(true)
-                    .build();
-        }
     }
 
 
@@ -42,21 +36,21 @@ public class UserRegisterDto {
 
         private int code;
         private String message;
-        private String username;
+        private TokenDto tokenDto;
 
         @Builder
-        public Response(int code, String message, String username) {
+        public Response(int code, String message, TokenDto tokenDto) {
             this.code = code;
             this.message = message;
-            this.username = username;
+            this.tokenDto = tokenDto;
         }
 
-        public static Response of(User user) {
-            RegisterEnum registerEnum = user.getId() > 0 ? RegisterEnum.SUCCESS : RegisterEnum.FAIL;
-            return Response.builder()
-                    .code(registerEnum.getCode())
-                    .message(registerEnum.getMessage())
-                    .username(user.getUsername())
+        public static UserLoginDto.Response of(TokenDto token) {
+            LoginEnum loginEnum = token != null ? LoginEnum.SUCCESS : LoginEnum.FAIL;
+            return UserLoginDto.Response.builder()
+                    .code(loginEnum.getCode())
+                    .message(loginEnum.getMessage())
+                    .tokenDto(token)
                     .build();
         }
     }

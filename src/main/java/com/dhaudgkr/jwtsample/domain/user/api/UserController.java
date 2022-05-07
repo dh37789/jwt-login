@@ -1,5 +1,6 @@
 package com.dhaudgkr.jwtsample.domain.user.api;
 
+import com.dhaudgkr.jwtsample.domain.user.dto.UserLoginDto;
 import com.dhaudgkr.jwtsample.domain.user.dto.UserRegisterDto;
 import com.dhaudgkr.jwtsample.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,15 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserRegisterDto.Response> register(@RequestBody UserRegisterDto.Request requestDto) {
         return new ResponseEntity<>(userService.register(requestDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserLoginDto.Response> login(@RequestBody UserLoginDto.Request requestDto) {
+        return new ResponseEntity<>(userService.login(requestDto), HttpStatus.OK);
     }
 
 }

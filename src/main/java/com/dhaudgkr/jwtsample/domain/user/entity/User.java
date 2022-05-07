@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,7 +12,7 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User{
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,9 @@ public class User{
 
     private String password;
 
+    @Column(name = "activated")
+    private boolean activated;
+
     @ManyToMany
     @JoinTable(
             name = "user_authority",
@@ -29,9 +33,10 @@ public class User{
     private Set<Authority> authorities;
 
     @Builder
-    public User(String username, String password) {
+    public User(String username, String password, boolean activated) {
         this.username = username;
         this.password = password;
+        this.activated = activated;
     }
 
 }

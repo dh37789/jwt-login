@@ -1,6 +1,7 @@
 package com.dhaudgkr.jwtsample.global.config.security;
 
-import com.dhaudgkr.jwtsample.global.config.security.AccessDeniedHandler.CustomAccessDeniedHandler;
+import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtAccessDeniedHandler;
+import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtAuthenticationFilter;
 import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtTokenProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -9,12 +10,13 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final String[] IGNORING_PATH = {"/swagger-resources",
             "/swagger-resources/**",
@@ -25,10 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             "/h2-console/**"};
 
-    private final String[] PERMIT_ALL_PATH = {"/api/v1/user/**","/exception/**"};
+    private final String[] PERMIT_ALL_PATH = {"/api/v1/user/register","/api/v1/user/login","/exception/**"};
 
-    public SecurityConfig (JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfig (JwtTokenProvider jwtTokenProvider, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
     }
 
     @Override
@@ -42,16 +46,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable() // 기본설정 미사용
                 .csrf().disable() // csrf 보안 미사용
-                .formLogin().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt로 인증하므로 세션 미사용
+
+                //TODO : 추후 에러페이지 생성
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 .and()
                 .authorizeRequests()
                 .antMatchers(PERMIT_ALL_PATH).permitAll()
-                .antMatchers("/api/v1/user/login").permitAll()
+
                 .anyRequest().authenticated()
+
                 .and()
-                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // jwt 필터 추가
+                .apply(new JwtSecurityConfig(jwtTokenProvider));
     }
 }
