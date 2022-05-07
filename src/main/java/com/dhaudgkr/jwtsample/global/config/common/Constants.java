@@ -1,4 +1,4 @@
-package com.dhaudgkr.jwtsample.global.config.security;
+package com.dhaudgkr.jwtsample.global.config.common;
 
 public class Constants {
     private Constants() {}

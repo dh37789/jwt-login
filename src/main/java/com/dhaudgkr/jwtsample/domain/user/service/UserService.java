@@ -26,9 +26,7 @@ public class UserService {
 
         User user = userRepository.save(requestDto.toEntity());
 
-        return UserRegisterDto.Response.builder()
-                .username(user.getUsername())
-                .build();
+        return UserRegisterDto.Response.of(user);
     }
 
     private boolean isExistsUsername(String username) {

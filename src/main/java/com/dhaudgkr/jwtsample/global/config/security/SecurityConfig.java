@@ -22,9 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/swagger-ui/**"};
+            "/swagger-ui/**",
+            "/h2-console/**"};
 
-    private final String[] PERMIT_ALL_PATH = {"/api/v1/user/**","/exception/**", "/h2-console/**"};
+    private final String[] PERMIT_ALL_PATH = {"/api/v1/user/**","/exception/**"};
 
     public SecurityConfig (JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
