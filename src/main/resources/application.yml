@@ -29,6 +29,12 @@ spring:
     access-token-validity-in-seconds: 180000
     refresh-token-validity-in-seconds: 604800
 
+  cache:
+    type: redis
+
+  redis:
+    host: localhost
+    port: 6390
 
 api:
   v1: /api/v1
