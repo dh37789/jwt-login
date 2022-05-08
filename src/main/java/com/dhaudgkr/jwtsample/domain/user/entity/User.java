@@ -33,10 +33,11 @@ public class User {
     private Set<Authority> authorities;
 
     @Builder
-    public User(String username, String password, boolean activated) {
+    public User(String username, String password, boolean activated, Set<Authority> authorities) {
         this.username = username;
         this.password = password;
         this.activated = activated;
+        this.authorities = authorities;
     }
 
 }

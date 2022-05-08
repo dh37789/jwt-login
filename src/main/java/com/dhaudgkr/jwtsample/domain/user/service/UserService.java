@@ -35,6 +35,8 @@ public class UserService {
 
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
 
+        requestDto.setUserAuthority();
+
         User user = userRepository.save(requestDto.toEntity());
 
         return UserRegisterDto.Response.of(user);

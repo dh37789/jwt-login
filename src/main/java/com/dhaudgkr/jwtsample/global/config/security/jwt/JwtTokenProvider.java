@@ -123,11 +123,6 @@ public class JwtTokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public String getUsername(String token) {
-        Claims claims = getClaims(token);
-        return (String) claims.get(Constants.USERNAME_KEY);
-    }
-
     public Claims getClaims(String token) {
         try {
             return Jwts

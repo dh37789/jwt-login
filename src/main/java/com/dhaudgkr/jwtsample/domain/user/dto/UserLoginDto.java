@@ -25,10 +25,7 @@ public class UserLoginDto {
         public void encodePassword(String encodePassword) {
             this.password = encodePassword;
         }
-
     }
-
-
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,11 +1,14 @@
 package com.dhaudgkr.jwtsample.domain.user.dto;
 
+import com.dhaudgkr.jwtsample.domain.user.entity.Authority;
 import com.dhaudgkr.jwtsample.domain.user.entity.User;
 import com.dhaudgkr.jwtsample.global.config.common.RegisterEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Collections;
 
 public class UserRegisterDto {
 
@@ -14,11 +17,13 @@ public class UserRegisterDto {
     public static class Request {
         private String username;
         private String password;
+        private Authority authority;
 
         @Builder
-        public Request (String username, String password) {
+        public Request (String username, String password, Authority authority) {
             this.username = username;
             this.password = password;
+            this.authority = authority;
         }
 
         public void encodePassword(String encodePassword) {
@@ -29,7 +34,14 @@ public class UserRegisterDto {
             return User.builder()
                     .username(username)
                     .password(password)
+                    .authorities(Collections.singleton(authority))
                     .activated(true)
+                    .build();
+        }
+
+        public void setUserAuthority() {
+            authority = Authority.builder()
+                    .authorityName("ROLE_USER")
                     .build();
         }
     }

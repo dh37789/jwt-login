@@ -2,9 +2,9 @@ package com.dhaudgkr.jwtsample.global.config.security;
 
 import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtAccessDeniedHandler;
 import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtAuthenticationEntryPoint;
-import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtAuthenticationFilter;
 import com.dhaudgkr.jwtsample.global.config.security.jwt.JwtTokenProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
