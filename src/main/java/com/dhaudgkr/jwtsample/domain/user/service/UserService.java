@@ -53,7 +53,7 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        TokenDto token = jwtTokenProvider.issueToken(authentication, requestDto.getUsername());
+        TokenDto token = jwtTokenProvider.issueToken(authentication);
 
         return UserLoginDto.Response.of(token);
     }

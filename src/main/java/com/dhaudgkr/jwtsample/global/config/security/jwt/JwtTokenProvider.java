@@ -2,6 +2,8 @@ package com.dhaudgkr.jwtsample.global.config.security.jwt;
 
 import com.dhaudgkr.jwtsample.domain.user.dto.TokenDto;
 import com.dhaudgkr.jwtsample.global.config.common.Constants;
+import com.dhaudgkr.jwtsample.global.config.security.jwt.exception.ExpireTokenException;
+import com.dhaudgkr.jwtsample.global.config.security.jwt.exception.UnsupportedTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -124,11 +126,13 @@ public class JwtTokenProvider implements InitializingBean {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
+//            throw new ExpireTokenException();
+            log.debug("JWT 토큰이 만료되었습니다.");
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
+            log.debug("지원하지 않는 JWT");
+//            throw new UnsupportedTokenException();
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
+            log.debug("JWT 토큰이 잘못되었습니다.");
         }
         return false;
     }
