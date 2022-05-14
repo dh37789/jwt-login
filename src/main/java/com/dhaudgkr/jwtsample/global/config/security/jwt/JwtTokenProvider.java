@@ -2,10 +2,7 @@ package com.dhaudgkr.jwtsample.global.config.security.jwt;
 
 import com.dhaudgkr.jwtsample.domain.user.dto.TokenDto;
 import com.dhaudgkr.jwtsample.global.config.common.Constants;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -47,35 +44,33 @@ public class JwtTokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto issueToken(Authentication authentication, String username) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
+    public TokenDto issueToken(Authentication authentication) {
         return TokenDto.builder()
-                .accessToken(createAccessToken(username, authorities))
-                .refreshToken(createRefreshToken(username,authorities))
+                .accessToken(createAccessToken(authentication))
+                .refreshToken(createRefreshToken(authentication))
                 .build();
     }
 
-    private String createAccessToken(String username, String authorities) {
+    private String createAccessToken(Authentication authentication) {
         Date now = new Date();
 
         return Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaim(username, authorities))
+                .setSubject(authentication.getName())
+                .claim(Constants.AUTHORITIES_KEY, authentication)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + accessTokenValidityInMilliseconds))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    private String createRefreshToken(String username, String authorities) {
+    private String createRefreshToken(Authentication authentication) {
         Date now = new Date();
 
         return Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaim(username, authorities))
+                .setSubject(authentication.getName())
+                .claim(Constants.AUTHORITIES_KEY, authentication)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + refreshTokenValidityInMilliseconds))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -91,18 +86,6 @@ public class JwtTokenProvider implements InitializingBean {
         headers.put("typ", "JWT");
         headers.put("alg", "HS256");
         return headers;
-    }
-
-    /**
-     * jwtToken의 claim생성
-     * @param username
-     * @return
-     */
-    private static Map<String, Object> createClaim(String username, String authorities) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(Constants.USERNAME_KEY, username);
-        claims.put(Constants.AUTHORITIES_KEY, authorities);
-        return claims;
     }
 
     public Authentication getAuthentication(String token) {
@@ -141,11 +124,12 @@ public class JwtTokenProvider implements InitializingBean {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            log.error("token expired" + e);
-            return false;
-        } catch (Exception e) {
-            log.error("token exception" + e);
-            return false;
+            log.info("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
         }
+        return false;
     }
 }
