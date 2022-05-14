@@ -2,8 +2,6 @@ package com.dhaudgkr.jwtsample.global.config.security.jwt;
 
 import com.dhaudgkr.jwtsample.domain.user.dto.TokenDto;
 import com.dhaudgkr.jwtsample.global.config.common.Constants;
-import com.dhaudgkr.jwtsample.global.config.security.jwt.exception.ExpireTokenException;
-import com.dhaudgkr.jwtsample.global.config.security.jwt.exception.UnsupportedTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
