@@ -3,7 +3,6 @@ package com.dhaudgkr.jwtsample.global.config.security.jwt;
 import com.dhaudgkr.jwtsample.global.config.common.Constants;
 import com.dhaudgkr.jwtsample.global.config.security.jwt.exception.ExpireTokenException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
