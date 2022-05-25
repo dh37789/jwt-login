@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             "/h2-console/**"};
 
-    private final String[] PERMIT_ALL_PATH = {"/api/v1/user/register","/api/v1/user/login","/exception/**"};
+    private final String[] PERMIT_ALL_PATH = {"/api/v1/user/register","/api/v1/user/login","/api/v1/token/reissue","/exception/**"};
 
     public SecurityConfig (JwtTokenProvider jwtTokenProvider, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler) {
         this.jwtTokenProvider = jwtTokenProvider;

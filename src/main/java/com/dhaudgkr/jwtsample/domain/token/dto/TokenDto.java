@@ -1,4 +1,4 @@
-package com.dhaudgkr.jwtsample.domain.user.dto;
+package com.dhaudgkr.jwtsample.domain.token.dto;
 
 import lombok.Builder;
 import lombok.Getter;

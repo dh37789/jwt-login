@@ -1,8 +1,7 @@
 package com.dhaudgkr.jwtsample.domain.user.dto;
 
-import com.dhaudgkr.jwtsample.domain.user.entity.User;
+import com.dhaudgkr.jwtsample.domain.token.dto.TokenDto;
 import com.dhaudgkr.jwtsample.global.config.common.LoginEnum;
-import com.dhaudgkr.jwtsample.global.config.common.RegisterEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -17,6 +17,7 @@
  - [X] Jwt 토큰 발급 개발
    - [X] Jwt 토큰 발급 로직 개발
    - [X] refresh 토큰 redis에 저장
+   - [ ] 토큰 재발급 기능 추가
  - [X] Jwt 토큰 및 로그인 검증
    - [X] index page 호출
  - [ ] Junit5 테스트 코드 작성

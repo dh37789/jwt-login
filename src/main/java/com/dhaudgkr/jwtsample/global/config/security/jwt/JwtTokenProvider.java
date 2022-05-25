@@ -1,6 +1,6 @@
 package com.dhaudgkr.jwtsample.global.config.security.jwt;
 
-import com.dhaudgkr.jwtsample.domain.user.dto.TokenDto;
+import com.dhaudgkr.jwtsample.domain.token.dto.TokenDto;
 import com.dhaudgkr.jwtsample.global.config.common.Constants;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -104,19 +104,6 @@ public class JwtTokenProvider implements InitializingBean {
         User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-    }
-
-    public Claims getClaims(String token) {
-        try {
-            return Jwts
-                    .parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
     }
 
     public boolean validateToken(String token) {
