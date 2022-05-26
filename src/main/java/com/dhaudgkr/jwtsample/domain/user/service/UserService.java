@@ -25,16 +25,17 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RedisService redisService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private static long refreshTokenValidityInMilliseconds; /* refresh토큰의 만료시간 */
+
+    @Value("${spring.jwt.refresh-token-validity-in-seconds}")
+    long refreshTokenValidityInMilliseconds;
 
     public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService
-            , AuthenticationManagerBuilder authenticationManagerBuilder, @Value("${spring.jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInMilliseconds) {
+            , AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.redisService = redisService;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
     }
 
     public UserRegisterDto.Response register(UserRegisterDto.Request requestDto) {

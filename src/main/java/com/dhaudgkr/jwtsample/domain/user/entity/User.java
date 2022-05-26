@@ -32,7 +32,8 @@ public class User {
     private Set<Authority> authorities;
 
     @Builder
-    public User(String username, String password, boolean activated, Set<Authority> authorities) {
+    public User(Long id, String username, String password, boolean activated, Set<Authority> authorities) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.activated = activated;

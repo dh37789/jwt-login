@@ -46,8 +46,6 @@ public class UserRegisterDto {
         }
     }
 
-
-
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Response {
